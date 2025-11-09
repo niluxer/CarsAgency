@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToolBar?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<BorderPane fx:id="mainContainer" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.mx.itcelaya.carsagency.MainController">
+    <padding>
+        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+    </padding>
+
+    <top>
+        <VBox spacing="3">
+            <MenuBar>
+                <menus>
+                    <Menu text="File">
+                        <graphic>
+                            <FontIcon iconLiteral="fab-r-project" iconSize="20" iconColor="brown" />
+                        </graphic>
+                        <MenuItem fx:id="mnuNew" text="New">
+                            <graphic>
+                                <FontIcon iconLiteral="far-file" iconSize="20" iconColor="antiquewhite" />
+                            </graphic>
+                        </MenuItem>
+                        <MenuItem fx:id="mnuOpen" text="Open" />
+                        <MenuItem fx:id="mnuSettings" text="Settings" />
+                        <MenuItem fx:id="mnuPrint" text="Print" />
+                        <SeparatorMenuItem />
+                        <MenuItem fx:id="mnuExit" text="Exit" />
+                    </Menu>
+                    <Menu text="Catalogs">
+                        <MenuItem fx:id="mnuCars" text="Cars" />
+                        <MenuItem fx:id="mnuBrands" text="Brands" />
+                        <MenuItem fx:id="mnuTransmission" text="Transmission" />
+                        <MenuItem fx:id="mnuEngines" text="Engines" />
+                        <SeparatorMenuItem />
+                        <MenuItem fx:id="mnuEmployees" text="Employees" />
+                    </Menu>
+                    <Menu text="Help">
+                        <MenuItem fx:id="mnuRegister" text="Register" />
+                        <MenuItem fx:id="mnuUpdates" text="Updates" />
+                        <MenuItem fx:id="mnuDocumentation" text="Documentation" />
+                        <MenuItem fx:id="mnuSupport" text="Support" />
+                        <SeparatorMenuItem />
+                        <MenuItem fx:id="mnuAbout" text="About" />
+                    </Menu>
+                </menus>
+            </MenuBar>
+            <ToolBar>
+                <Button fx:id="btnOpc1" text="Opc. 1">
+                    <graphic>
+                        <FontIcon iconLiteral="fab-fedex" iconSize="20" iconColor="brown" />
+                    </graphic>
+                </Button>
+                <Button fx:id="btnOpc2" text="Opc. 2">
+                    <graphic>
+                        <FontIcon iconLiteral="fab-fort-awesome" iconSize="50" iconColor="blue" />
+                    </graphic>
+                </Button>
+                <Button fx:id="btnOpc3" text="Opc. 3">
+                    <graphic>
+                        <FontIcon iconLiteral="fab-github" iconSize="50" iconColor="black" />
+                    </graphic>
+                </Button>
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <!--left>
+        <Label fx:id="welcomeText"/>
+        <Button text="Hello!" onAction="#onHelloButtonClick"/>
+    </left-->
+
+    <center>
+        <Label text="Welcome to my App..." />
+    </center>
+
+    <right>
+
+    </right>
+
+</BorderPane>

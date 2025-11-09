@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.mx.itcelaya.templateapp.controllers.Catalog1"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox style="-fx-background-color: #6252b3;" alignment="CENTER" AnchorPane.topAnchor="1" AnchorPane.rightAnchor="1" AnchorPane.leftAnchor="1" AnchorPane.bottomAnchor="1">
+        <Text style="-fx-font-size: 25pt;" text="Welcome to Catalog 3"  />
+    </VBox>
+
+</AnchorPane>
