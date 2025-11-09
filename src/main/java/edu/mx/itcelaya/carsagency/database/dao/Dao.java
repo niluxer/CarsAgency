@@ -1,4 +1,4 @@
-package com.example.mysqlconnectiondemo.database.dao;
+package edu.mx.itcelaya.carsagency.database.dao;
 
 import java.util.List;
 import java.util.Optional;

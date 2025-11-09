@@ -1,37 +1,43 @@
-package com.example.mysqlconnectiondemo.database.dao;
+package edu.mx.itcelaya.carsagency.database.dao;
 
-import com.example.mysqlconnectiondemo.MySQLConnection;
-import com.example.mysqlconnectiondemo.models.Category;
-import com.example.mysqlconnectiondemo.models.Product;
+import edu.mx.itcelaya.carsagency.database.MySQLConnection;
+import edu.mx.itcelaya.carsagency.enums.BrakesType;
+import edu.mx.itcelaya.carsagency.enums.TransmissionType;
+import edu.mx.itcelaya.carsagency.models.Brand;
+import edu.mx.itcelaya.carsagency.models.Car;
+import edu.mx.itcelaya.carsagency.models.Engine;
 import javafx.collections.FXCollections;
-
 import java.sql.*;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-public class ProductDao extends MySQLConnection implements Dao<Product> {
+public class CarDao extends MySQLConnection implements Dao<Car> {
     Connection conn = getConnection();
     @Override
-    public Optional<Product> findById(int id) {
-        Optional<Product> optProduct = Optional.empty();
-        String query = "select * from products where id = ?";
+    public Optional<Car> findById(int id) {
+        Optional<Car> optProduct = Optional.empty();
+        String query = "select * from cars where id = ?";
         try {
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
             if ( rs.next() )
             {
-                Product product = new Product();
-                product.setId(rs.getInt("id"));
-                product.setName(rs.getString("name"));
-                product.setColor(rs.getString("color"));
-                product.setQuantity(rs.getInt("quantity"));
-                product.setCategory_id(rs.getInt("category_id"));
-                product.setCategory(getCategory(rs.getInt("category_id")));
-                product.setImage(rs.getString("image"));
-                optProduct = Optional.of(product);
+                Car car = new Car(
+                        rs.getInt("id"),
+                        rs.getInt("year"),
+                        rs.getString("model"),
+                        rs.getString("color"),
+                        rs.getDouble("price"),
+                        rs.getInt("mileage"),
+                        rs.getInt("doors"),
+                        new Brand(rs.getInt("brand_id"), ""),
+                        BrakesType.valueOf(rs.getString("brakes_type")),
+                        TransmissionType.valueOf(rs.getString("transmission_type")),
+                        new Engine(rs.getInt("engine_id"), "", ""),
+                        rs.getString("image"));
+                optProduct = Optional.of(car);
             }
 
         } catch (SQLException e) {
@@ -40,91 +46,175 @@ public class ProductDao extends MySQLConnection implements Dao<Product> {
 
         return optProduct;
     }
+    /*@Override
+    public List<Car> findAll() {
+
+        List<Car> carsList = FXCollections.observableArrayList();
+        String query = "select * from cars";
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next())
+            {
+                Car car = new Car(
+                        rs.getInt("id"),
+                        rs.getInt("year"),
+                        rs.getString("model"),
+                        rs.getString("color"),
+                        rs.getDouble("price"),
+                        rs.getInt("mileage"),
+                        rs.getInt("doors"),
+                        getBrand(rs.getInt("brand_id")),
+                        BrakesType.valueOf(rs.getString("brakes_type")),
+                        TransmissionType.valueOf(rs.getString("transmission_type")),
+                        getEngine(rs.getInt("engine_id")),
+                        rs.getString("image")
+                );
+                carsList.add(car);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return carsList;
+    }*/
+
     @Override
-    public List<Product> findAll() {
+    public List<Car> findAll() {
 
-        List<Product> productsList = FXCollections.observableArrayList();
-        String query = "select * from products";
+        List<Car> carsList = FXCollections.observableArrayList();
+        String query = "select c.*, b.name as brand_name, e.name as engine_name\n" +
+                "from cars c\n" +
+                "join brands b on c.brand_id = b.id\n" +
+                "join engines e on c.engine_id = e.id\n" +
+                "order by  c.id;";
         try {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(query);
 
             while (rs.next())
             {
-                Product p = new Product();
-                p.setId(rs.getInt("id"));
-                p.setName(rs.getString("name"));
-                p.setColor(rs.getString("color"));
-                p.setPrice(rs.getDouble("price"));
-                p.setQuantity(rs.getInt("quantity"));
-                p.setCategory_id(rs.getInt("category_id"));
-                p.setCategory(getCategory(rs.getInt("category_id")));
-                p.setImage(rs.getString("image"));
-                productsList.add(p);
+                Car car = new Car(
+                        rs.getInt("id"),
+                        rs.getInt("year"),
+                        rs.getString("model"),
+                        rs.getString("color"),
+                        rs.getDouble("price"),
+                        rs.getInt("mileage"),
+                        rs.getInt("doors"),
+                        rs.getString("brand_name"),
+                        BrakesType.valueOf(rs.getString("brakes_type")),
+                        TransmissionType.valueOf(rs.getString("transmission_type")),
+                        rs.getString("engine_name"),
+                        rs.getString("image")
+                );
+                carsList.add(car);
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return productsList;
+        return carsList;
     }
 
-    public Map<String, Integer> totalProductsByCategory() {
-
-        Map<String, Integer> results = new HashMap<String, Integer>();
-        String query = "select c.name as category, sum(quantity) as total \n" +
-                "from products p\n" +
-                "join categories c on p.category_id = c.id\n" +
-                "group by 1\n" +
-                "order by 2 desc";
-        try {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-
-            while (rs.next())
-            {
-                results.put(rs.getString("category"), rs.getInt("total"));
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return results;
-    }
-
-    private Category getCategory(int category_id)
+    private Brand getBrand(int brand_id)
     {
-        String query = "select * from categories where id = " + category_id;
+        String query = "select * from brands where id = " + brand_id;
         try {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(query);
             rs.next();
-            Category category = new Category();
-            category.setId(rs.getInt("id"));
-            category.setName(rs.getString("name"));
-            //category.setColor(rs.getString("color"));
-            category.setIcon(rs.getString("icon"));
-            return category;
+            Brand brand = new Brand();
+            brand.setId(rs.getInt("id"));
+            brand.setName(rs.getString("name"));
+            return brand;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
     }
-    @Override
-    public boolean save(Product product) {
 
-        String query = "insert into products " +
-                        " (name, description, price, quantity, color, image, category_id)" +
-                        " values (?, ?, ?, ?, ?, ?, ?)";
+    public List<Brand> getBrands()
+    {
+        List<Brand> brandsList = new ArrayList<>();
+        String query = "select * from brands";
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            while(rs.next())
+            {
+                Brand brand = new Brand();
+                brand.setId(rs.getInt("id"));
+                brand.setName(rs.getString("name"));
+                brandsList.add(brand);
+
+            }
+            return brandsList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public List<Engine> getEngines()
+    {
+        List<Engine> enginesList = new ArrayList<>();
+        String query = "select * from engines";
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            while(rs.next())
+            {
+                Engine engine = new Engine();
+                engine.setId(rs.getInt("id"));
+                engine.setName(rs.getString("name"));
+                enginesList.add(engine);
+
+            }
+            return enginesList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private Engine getEngine(int engine_id)
+    {
+        String query = "select * from engines where id = " + engine_id;
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            Engine engine = new Engine();
+            engine.setId(rs.getInt("id"));
+            engine.setName(rs.getString("name"));
+            return engine;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    public boolean save(Car car) {
+
+        String query = "insert into cars " +
+                        " (year, model, color, price, mileage, doors, brand_id, brakes_type, transmission_type, engine_id, image)" +
+                        " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, product.getName());
-            ps.setString(2, product.getDescription());
-            ps.setDouble(3, product.getPrice());
-            ps.setInt(4, product.getQuantity());
-            ps.setString(5, product.getColor());
-            ps.setString(6, product.getImage());
-            ps.setInt(7, product.getCategory_id());
+            ps.setInt(1, car.getYear());
+            ps.setString(2, car.getModel());
+            ps.setString(3, car.getColor());
+            ps.setDouble(4, car.getPrice());
+            ps.setInt(5, car.getMileage());
+            ps.setInt(6, car.getDoors());
+            ps.setInt(7, car.getBrand().getId());
+            ps.setString(8, car.getBrakesType().name());
+            ps.setString(9, car.getTransmissionType().name());
+            ps.setInt(10, car.getEngine().getId());
+            ps.setString(11, car.getImage());
             ps.execute();
             return true;
         } catch (SQLException e) {
@@ -135,32 +225,23 @@ public class ProductDao extends MySQLConnection implements Dao<Product> {
 
     }
     @Override
-    public boolean update(Product product) {
-        String query = "update products set name=?, description=?, color=?, price=?, quantity=?, image=?, category_id=?  where id = ?";
+    public boolean update(Car car) {
+        String query = "update cars set year = ?, model = ?, color = ?, price = ?, mileage = ?, doors = ?, brand_id = ?, brakes_type = ?, transmission_type = ?, engine_id = ?, image = ?  where id = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, product.getName());
-            ps.setString(2, product.getDescription());
-            ps.setString(3, product.getColor());
-            ps.setDouble(4, product.getPrice());
-            ps.setInt(5, product.getQuantity());
-            ps.setInt(6, product.getCategory_id());
-            ps.setString(7, product.getImage());
-            ps.setInt(8, product.getId());
-            System.out.println("ID to update: " + product.getId());
-            ps.execute();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    public boolean updateName(String name, int productId) {
-        String query = "update products set name=?  where id = ?";
-        try {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, name);
-            ps.setInt(2, productId);
+            ps.setInt(1, car.getYear());
+            ps.setString(2, car.getModel());
+            ps.setString(3, car.getColor());
+            ps.setDouble(4, car.getPrice());
+            ps.setInt(5, car.getMileage());
+            ps.setInt(6, car.getDoors());
+            ps.setInt(7, car.getBrand().getId());
+            ps.setString(8, car.getBrakesType().name());
+            ps.setString(9, car.getTransmissionType().name());
+            ps.setInt(10, car.getEngine().getId());
+            ps.setString(11, car.getImage());
+            ps.setInt(12, car.getId());
+            System.out.println("ID to update: " + car.getId());
             ps.execute();
             return true;
         } catch (SQLException e) {
@@ -170,11 +251,11 @@ public class ProductDao extends MySQLConnection implements Dao<Product> {
     }
 
     @Override
-    public boolean delete(int product_id) {
-        String query = "delete from products where id = ?";
+    public boolean delete(int car_id) {
+        String query = "delete from cars where id = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, product_id);
+            ps.setInt(1, car_id);
             ps.execute();
             return true;
         } catch (SQLException e) {

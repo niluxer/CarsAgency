@@ -6,9 +6,71 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import edu.mx.itcelaya.carsagency.customcontrols.ImageComboBox?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
+            fx:controller="edu.mx.itcelaya.carsagency.catalogs.forms.CarForm"
+            prefHeight="400.0" prefWidth="600.0">
+    <GridPane vgap="15" hgap="10" alignment="CENTER" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <padding>
+            <Insets topRightBottomLeft="5" />
+        </padding>
+        <Text text="Cars List" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
+        <Label text="Year" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Label text="Model" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label text="Color" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <Label text="Price" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <Label text="Mileage" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <Label text="Doors" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <Label text="Brakes" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <Label text="Transmission" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+        <Label text="Brand" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+        <Label text="Engine" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+        <Label text="Image" GridPane.columnIndex="0" GridPane.rowIndex="11" />
+        <TextField fx:id="tfYear" promptText="Type car's year" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <TextField fx:id="tfModel" promptText="Type car's model" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <TextField fx:id="tfColor" promptText="Type car's color" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <TextField fx:id="tfPrice" promptText="Type car's price" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <TextField fx:id="tfMileage" promptText="Type car's mileage" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <TextField fx:id="tfDoors" promptText="Type car's total doors" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+        <ComboBox fx:id="cmbBrakes" promptText="Select Brakes Type" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <!--items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="DRUM"/>
+                    <String fx:value="DISC"/>
+                    <String fx:value="HYDRAULIC"/>
+                </FXCollections>
+            </items-->
+        </ComboBox>
+        <ComboBox fx:id="cmbTransmission" promptText="Select Transmission Type" GridPane.columnIndex="1" GridPane.rowIndex="8">
+        </ComboBox>
+        <ComboBox fx:id="cmbBrand" promptText="Select Brand" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            <!--items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="BMW"/>
+                    <String fx:value="MERCEDES"/>
+                    <String fx:value="HYUNDAI"/>
+                </FXCollections>
+            </items-->
+        </ComboBox>
+        <ComboBox fx:id="cmbEngine" promptText="Select Engine" GridPane.columnIndex="1" GridPane.rowIndex="10">
+        </ComboBox>
+        <!--ComboBox fx:id="cmbImage" promptText="Select Image" GridPane.columnIndex="1" GridPane.rowIndex="11">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="car1.jpg"/>
+                    <String fx:value="car2.jpg"/>
+                    <String fx:value="car3.jpg"/>
+                </FXCollections>
+             </items>
+        </ComboBox-->
+        <ImageComboBox fx:id="cmbImage" promptText="Select Image" GridPane.columnIndex="1" GridPane.rowIndex="11" />
 
+        <HBox GridPane.columnIndex="0" GridPane.rowIndex="12" GridPane.columnSpan="2" spacing="10" alignment="CENTER">
+            <Button fx:id="btnReset" text="Reset" />
+            <Button fx:id="btnSave" text="Save" />
+        </HBox>
+    </GridPane>
 </AnchorPane>

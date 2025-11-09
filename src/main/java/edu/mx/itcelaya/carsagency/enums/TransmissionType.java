@@ -1,5 +1,5 @@
 package edu.mx.itcelaya.carsagency.enums;
 
-public enum BrakesType {
-    DRUMS, DISC, HYDRAULIC
+public enum TransmissionType {
+    MANUAL, AUTOMATIC
 }

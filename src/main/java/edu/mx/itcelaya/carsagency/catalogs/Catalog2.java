@@ -1,4 +1,4 @@
-package edu.mx.itcelaya.templateapp.controllers;
+package edu.mx.itcelaya.carsagency.catalogs;
 
 import javafx.fxml.Initializable;
 

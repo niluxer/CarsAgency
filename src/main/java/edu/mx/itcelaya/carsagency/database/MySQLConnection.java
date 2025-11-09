@@ -1,4 +1,4 @@
-package com.example.mysqlconnectiondemo;
+package edu.mx.itcelaya.carsagency.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class MySQLConnection {
     private static Connection conn = null;
     private static String hostname   = "localhost";
-    private static String dbname = "inventory";
+    private static String dbname = "carsagency";
     private static String dbport = "3306";
     private static String dbuser = "topicos";
     private static String dbpass = "TopicosProgra#";
